@@ -27,3 +27,8 @@
 </fieldset>
 
 <input type="submit" value="submit" id="submit" required="required" />
+<br>
+<?php
+$fmt=$_GET['fmt'];
+echo $fmt;
+?>

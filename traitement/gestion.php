@@ -2,6 +2,7 @@
 $duration = $_POST['duration'];
 $task = $_POST['task'];
 $difficulte = $_POST['radio'];
+$date = $_POST['date'];
 
 
 $day = date("l");
@@ -12,7 +13,11 @@ $fmt = datefmt_create(
     IntlDateFormatter::FULL,
     'Europe/Paris',
     IntlDateFormatter::GREGORIAN,
-    'EEEE dd MMMM yyyy'
+    'HH:mm:ss EEEE dd MMMM yyyy'
 );
-echo datefmt_format($fmt, time());
+// header("Refresh:1");
+$date=datefmt_format($fmt, time());
+$date_encode = urlencode($date);
+header("Location: ../index.php?fmt=$date_encode");
+exit;
 ?>
