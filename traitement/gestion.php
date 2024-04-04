@@ -6,14 +6,13 @@ $difficulte = $_POST['radio'];
 
 $day = date("l");
 $nday = date("n");
-$month = datefmt_create(
+$fmt = datefmt_create(
     'fr_FR',
     IntlDateFormatter::FULL,
     IntlDateFormatter::FULL,
     'Europe/Paris',
     IntlDateFormatter::GREGORIAN,
-    'dd/MM/yyyy'
+    'EEEE dd MMMM yyyy'
 );
-echo IntlDateFormatter::getErrorMessage();
-echo $month->format(time()); // Utilisation de la méthode format() pour afficher la date formatée
+echo datefmt_format($fmt, time());
 ?>
