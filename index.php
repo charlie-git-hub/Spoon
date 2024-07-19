@@ -25,24 +25,30 @@
     <div id="calendar"></div>
 
     <script>
-    function get_current_week_dates() {
-        const current_date = new Date();
-        const dayOfWeek = current_date.getDay(); // 0 (dimanche) à 6 (samedi)
+    let currentWeekStart = getStartOfCurrentWeek(); // Date de début de la semaine courante
+
+    function getStartOfCurrentWeek() {
+        const currentDate = new Date();
+        const dayOfWeek = currentDate.getDay(); // 0 (dimanche) à 6 (samedi)
         const daysToMonday = (dayOfWeek + 6) % 7; // Nombre de jours à soustraire pour obtenir le lundi
         
-        const first_day_of_week = new Date(current_date);
-        first_day_of_week.setDate(current_date.getDate() - daysToMonday);
+        const firstDayOfWeek = new Date(currentDate);
+        firstDayOfWeek.setDate(currentDate.getDate() - daysToMonday);
 
+        return firstDayOfWeek;
+    }
+
+    function getWeekDates(startDate) {
         const dates = [];
         for (let i = 0; i < 7; i++) {
-            const date = new Date(first_day_of_week);
-            date.setDate(first_day_of_week.getDate() + i);
+            const date = new Date(startDate);
+            date.setDate(startDate.getDate() + i);
             dates.push(date);
         }
         return dates;
     }
 
-    function create_calendar(week_dates) {
+    function createCalendar(weekStartDate) {
         const calendar = document.querySelector('#calendar');
         calendar.innerHTML = '';
 
@@ -51,29 +57,40 @@
 
         const week = document.createElement('tr');
 
-        const arrow_before = document.createElement('td');
-        arrow_before.innerText = '<<';
-        arrow_before.classList.add('arrow'); // Ajoutez une classe pour une gestion facile
-        week.appendChild(arrow_before);
+        const arrowBefore = document.createElement('td');
+        arrowBefore.innerText = '<<';
+        arrowBefore.classList.add('arrow');
+        week.appendChild(arrowBefore);
 
-        week_dates.forEach(date => {
+        const weekDates = getWeekDates(weekStartDate);
+        weekDates.forEach(date => {
             const day = document.createElement('td');
             day.innerText = date.getDate();
             day.dataset.date = date.toDateString(); 
             week.appendChild(day);
         });
 
-        const arrow_after = document.createElement('td');
-        arrow_after.innerText = '>>';
-        arrow_after.classList.add('arrow'); // Ajoutez une classe pour une gestion facile
-        week.appendChild(arrow_after);
+        const arrowAfter = document.createElement('td');
+        arrowAfter.innerText = '>>';
+        arrowAfter.classList.add('arrow');
+        week.appendChild(arrowAfter);
 
         table.appendChild(week);
 
-        highlight_current_day(); 
+        highlightCurrentDay(); 
+
+        arrowBefore.addEventListener('click', () => {
+            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+            createCalendar(currentWeekStart);
+        });
+
+        arrowAfter.addEventListener('click', () => {
+            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+            createCalendar(currentWeekStart);
+        });
     }
 
-    function highlight_current_day() {
+    function highlightCurrentDay() {
         const today = new Date().toDateString(); 
         const days = document.querySelectorAll('#calendar td');
 
@@ -84,16 +101,7 @@
         });
     }
 
-    function handleCellClick(event) {
-        if (event.target.tagName === 'TD') {
-            alert(`Clic détecté sur ${event.target.innerText}`);
-        }
-    }
-
-    const current_week_dates = get_current_week_dates();
-    create_calendar(current_week_dates);
-
-    document.querySelector('#calendar').addEventListener('click', handleCellClick);
+    createCalendar(currentWeekStart);
     </script>
 </body>
 </html>
