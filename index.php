@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,6 +25,19 @@
     <div id="calendar"></div>
 
     <script>
+                const month = document.createElement('tr');
+
+   function Month() {
+
+const monthCell = document.createElement('td');
+const date = new Date(); // Crée un nouvel objet Date avec la date actuelle
+const month = date.getMonth() + 1; // Obtient le mois actuel (0-11), ajout de 1 pour obtenir 1-12
+
+monthCell.innerText = month; // Affiche le mois dans la cellule
+monthCell.dataset.date = date.toDateString(); // Ajoute une propriété 'data-date' avec la date complète
+month.appendChild(monthCell);
+}
+
     let currentWeekStart = getStartOfCurrentWeek(); // Date de début de la semaine courante
 
     function getStartOfCurrentWeek() {
@@ -57,6 +70,8 @@
 
         const week = document.createElement('tr');
 
+        
+        
         const arrowBefore = document.createElement('td');
         arrowBefore.innerText = '<<';
         arrowBefore.classList.add('arrow');
@@ -88,6 +103,7 @@
             currentWeekStart.setDate(currentWeekStart.getDate() + 7);
             createCalendar(currentWeekStart);
         });
+
     }
 
     function highlightCurrentDay() {

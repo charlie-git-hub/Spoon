@@ -26,10 +26,23 @@ class Task {
         }
     }
 
-    public function supprimer($id_tache) {
+    public function delete($id_tache) {
         try {
             $req1 = $this->db->prepare('DELETE FROM tache WHERE id_tache = :id_tache');
             $req1->execute([':id_tache' => $id_tache]);
+        } catch (PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
+    }
+    
+    public function update($id_tache, $energie, $difficulte) {
+        try {
+            $req2 = $this->db->prepare('UPDATE tache SET energie = :energie, difficulte = :difficulte WHERE id_tache = :id_tache');
+            $req2->execute([
+                ':energie' => $energie,
+                ':difficulte' => $difficulte,
+                ':id_tache' => $id_tache
+            ]);
         } catch (PDOException $e) {
             echo 'Error: ' . $e->getMessage();
         }

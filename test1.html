@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+
+<script>let maVariable = 'valeur';
+  $.ajax({
+  url: 'autretest.php',
+  data: 'maVariable='+ maVariable,
+  success: function(reponse) {
+    alert(reponse); // reponse contient l'affichage du fichier PHP (soit echo)
+  }
+});
+</script>
+</body>
+</html>
