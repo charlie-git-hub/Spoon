@@ -1,0 +1,10 @@
+
+
+#form_task{
+    /* display: none; */
+    width: fit-content;
+    padding: 1rem;
+}
+.asterix{
+    color: red;
+}
