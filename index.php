@@ -1,123 +1,60 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .current-day {
-            background-color: grey;
-            color: white;
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <script src='fullcalendar-6.1.15\fullcalendar-6.1.15\dist\index.global.min.js'></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
+
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    selectable: true,
+    locale: 'fr',
+    events: [
+      {
+        title: 'All Day Event',
+        start: '2024-09-04T07:00:00'
+      }],
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'timeGridDay,timeGridWeek,dayGridMonth'
+    },
+    dateClick: function(info) {
+      alert('clicked ' + info.dateStr);
+    },
+    select: function(info) {
+
+      $.ajax({
+        url: 'autretest.php', 
+        type: 'POST',
+        data: {
+          start: info.startStr,
+          end: info.endStr
+        },
+        success: function(response) {
+          alert('Données envoyées: ' + response); 
+        },
+        error: function(xhr, status, error) {
+          alert('Erreur lors de l\'envoi: ' + error);
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        td {
-            border: 1px solid black;
-            text-align: center;
-            padding: 10px;
-            cursor: pointer; /* Ajoute un curseur pointer pour indiquer que c'est cliquable */
-        }
-    </style>
-</head>
-<body>
-    <div id="calendar"></div>
-
-    <script>
-                const month = document.createElement('tr');
-
-   function Month() {
-
-const monthCell = document.createElement('td');
-const date = new Date(); // Crée un nouvel objet Date avec la date actuelle
-const month = date.getMonth() + 1; // Obtient le mois actuel (0-11), ajout de 1 pour obtenir 1-12
-
-monthCell.innerText = month; // Affiche le mois dans la cellule
-monthCell.dataset.date = date.toDateString(); // Ajoute une propriété 'data-date' avec la date complète
-month.appendChild(monthCell);
-}
-
-    let currentWeekStart = getStartOfCurrentWeek(); // Date de début de la semaine courante
-
-    function getStartOfCurrentWeek() {
-        const currentDate = new Date();
-        const dayOfWeek = currentDate.getDay(); // 0 (dimanche) à 6 (samedi)
-        const daysToMonday = (dayOfWeek + 6) % 7; // Nombre de jours à soustraire pour obtenir le lundi
-        
-        const firstDayOfWeek = new Date(currentDate);
-        firstDayOfWeek.setDate(currentDate.getDate() - daysToMonday);
-
-        return firstDayOfWeek;
+      });
     }
+  });
 
-    function getWeekDates(startDate) {
-        const dates = [];
-        for (let i = 0; i < 7; i++) {
-            const date = new Date(startDate);
-            date.setDate(startDate.getDate() + i);
-            dates.push(date);
-        }
-        return dates;
-    }
+  calendar.render();
+});
+</script>
 
-    function createCalendar(weekStartDate) {
-        const calendar = document.querySelector('#calendar');
-        calendar.innerHTML = '';
-
-        const table = document.createElement('table');
-        calendar.appendChild(table);
-
-        const week = document.createElement('tr');
-
-        
-        
-        const arrowBefore = document.createElement('td');
-        arrowBefore.innerText = '<<';
-        arrowBefore.classList.add('arrow');
-        week.appendChild(arrowBefore);
-
-        const weekDates = getWeekDates(weekStartDate);
-        weekDates.forEach(date => {
-            const day = document.createElement('td');
-            day.innerText = date.getDate();
-            day.dataset.date = date.toDateString(); 
-            week.appendChild(day);
-        });
-
-        const arrowAfter = document.createElement('td');
-        arrowAfter.innerText = '>>';
-        arrowAfter.classList.add('arrow');
-        week.appendChild(arrowAfter);
-
-        table.appendChild(week);
-
-        highlightCurrentDay(); 
-
-        arrowBefore.addEventListener('click', () => {
-            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
-            createCalendar(currentWeekStart);
-        });
-
-        arrowAfter.addEventListener('click', () => {
-            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
-            createCalendar(currentWeekStart);
-        });
-
-    }
-
-    function highlightCurrentDay() {
-        const today = new Date().toDateString(); 
-        const days = document.querySelectorAll('#calendar td');
-
-        days.forEach(day => {
-            if (day.dataset.date === today) { 
-                day.classList.add('current-day'); 
-            }
-        });
-    }
-
-    createCalendar(currentWeekStart);
-    </script>
-</body>
+  </head>
+  <body>
+    <div id='calendar'></div>
+    <FORM id="form1" method="POST" action="form.php">
+      <input type="text"/>
+      <input type="submit" value="Valider"/>
+   </FORM>
+   <input type="button" value="Afficher/Cacher" onclick="hideThis('form1')" />
+  </body>
 </html>
